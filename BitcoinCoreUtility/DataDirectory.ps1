@@ -28,6 +28,10 @@ function Remove-RegtestDataDirectory {
 	Remove-Item $DefaultSetting.Regtest.DataDirectory -Recurse -Force -Confirm
 }
 
+function Show-RegtestDataDirectory {
+	Invoke-Item $DefaultSetting.Regtest.DataDirectory
+}
+
 function Show-DataDirectory {
 	Invoke-Item $DefaultSetting.DataDirectory
 }
