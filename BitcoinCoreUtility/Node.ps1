@@ -28,3 +28,7 @@ function Start-Node {
 	Write-Information ("Starting bitcoind: {0}" -f $command)
 	Invoke-Expression $command
 }
+
+function Stop-Node {
+	bitcoin-cli stop
+}
