@@ -1,6 +1,14 @@
 $DefaultSetting = @{}
 $DefaultSetting.DataDirectory = Join-Path $env:APPDATA Bitcoin
 $DefaultSetting.Cookie = Join-Path $DefaultSetting.DataDirectory .cookie
+$DefaultSetting.RpcHost = '127.0.0.1'
+$DefaultSetting.RpcPort = 8332
+
+$DefaultSetting.Testnet = @{}
+$DefaultSetting.Testnet.DataDirectory = Join-Path $DefaultSetting.DataDirectory testnet3
+$DefaultSetting.Testnet.Cookie = Join-Path $DefaultSetting.Testnet.DataDirectory .cookie
+$DefaultSetting.Testnet.RpcHost = '127.0.0.1'
+$DefaultSetting.Testnet.RpcPort = 18332
 
 $DefaultSetting.Regtest = @{}
 $DefaultSetting.Regtest.DataDirectory = Join-Path $DefaultSetting.DataDirectory regtest
