@@ -28,10 +28,16 @@ function Remove-RegtestDataDirectory {
 	Remove-Item $DefaultSetting.Regtest.DataDirectory -Recurse -Force -Confirm
 }
 
-function Show-RegtestDataDirectory {
-	Invoke-Item $DefaultSetting.Regtest.DataDirectory
-}
-
 function Show-DataDirectory {
-	Invoke-Item $DefaultSetting.DataDirectory
+	param (
+		[ValidateSet('mainnet', 'regtest', 'testnet')]
+		[string]
+		$Chain = 'regtest'
+	)
+
+	switch ($Chain) {
+		mainnet { Invoke-Item $DefaultSetting.DataDirectory }
+		regtest { Invoke-Item $DefaultSetting.Regtest.DataDirectory }
+		testnet { Invoke-Item $DefaultSetting.Testnet.DataDirectory }
+	}
 }
