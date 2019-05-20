@@ -1,6 +1,6 @@
 function Get-RpcCredential {
 	param (
-		[ValidateSet('mainnet', 'regtest')]
+		[ValidateSet('mainnet', 'regtest', 'testnet')]
 		[string]
 		$Chain = 'regtest'
 	)
@@ -8,6 +8,7 @@ function Get-RpcCredential {
 	$cookiePath = switch ($Chain) {
 		mainnet { $DefaultSetting.Cookie }
 		regtest { $DefaultSetting.Regtest.Cookie }
+		testnet { $DefaultSetting.Testnet.Cookie }
 	}
 
 	$cookie = (Get-Content $cookiePath) -split ':'
