@@ -22,7 +22,11 @@ function Invoke-Rpc {
 	param (
 		[Parameter(Mandatory)]
 		[string]
-		$Method
+		$Method,
+
+		[ValidateSet('mainnet', 'regtest', 'testnet')]
+		[string]
+		$Chain = 'regtest'
 	)
 
 	$body = @{
@@ -32,11 +36,26 @@ function Invoke-Rpc {
 		params = @()
 	} | ConvertTo-Json
 
+	switch ($Chain) {
+		mainnet {
+			$rpcHost = $DefaultSetting.RpcHost
+			$rpcPort = $DefaultSetting.RpcPort
+		}
+		regtest {
+			$rpcHost = $DefaultSetting.Regtest.RpcHost
+			$rpcPort = $DefaultSetting.Regtest.RpcPort
+		 }
+		testnet {
+			$rpcHost = $DefaultSetting.Testnet.RpcHost
+			$rpcPort = $DefaultSetting.Testnet.RpcPort
+		}
+	}
+
 	$param = @{
-		Uri = "http://$($DefaultSetting.Regtest.RpcHost):$($DefaultSetting.Regtest.RpcPort)/"
+		Uri = "http://${rpcHost}:${rpcPort}/"
 		Body = $body
 		ContentType = 'text/plain'
-		Credential = Get-RpcCredential regtest
+		Credential = Get-RpcCredential $Chain
 		Method = 'Post'
 		Authentication = 'Basic'
 		AllowUnencryptedAuthentication = $true
