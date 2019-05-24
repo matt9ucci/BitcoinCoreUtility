@@ -29,12 +29,7 @@ function Invoke-Rpc {
 		$Chain = 'regtest'
 	)
 
-	$body = @{
-		jsonrpc = '1.0'
-		id = Get-Date -Format yyyyMMddHHmmssfff
-		method = $Method
-		params = @()
-	} | ConvertTo-Json
+	$body = New-RpcBody $Method
 
 	switch ($Chain) {
 		mainnet {
@@ -63,4 +58,25 @@ function Invoke-Rpc {
 
 	$content = (Invoke-WebRequest @param).Content | ConvertFrom-Json
 	$content.result
+}
+
+function New-RpcBody {
+	param (
+		[Parameter(Mandatory)]
+		[string]
+		$Method,
+
+		[string]
+		$Id = (Get-Date -Format yyyyMMddHHmmssfff),
+
+		[string[]]
+		$Params = @()
+	)
+
+	@{
+		jsonrpc = '1.0'
+		id = $Id
+		method = $Method
+		params = $Params
+	} | ConvertTo-Json
 }
