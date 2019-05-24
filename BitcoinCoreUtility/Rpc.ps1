@@ -24,12 +24,15 @@ function Invoke-Rpc {
 		[string]
 		$Method,
 
+		[string[]]
+		$Params = @(),
+
 		[ValidateSet('mainnet', 'regtest', 'testnet')]
 		[string]
 		$Chain = 'regtest'
 	)
 
-	$body = New-RpcBody $Method
+	$body = New-RpcBody -Method $Method -Params $Params
 
 	switch ($Chain) {
 		mainnet {
