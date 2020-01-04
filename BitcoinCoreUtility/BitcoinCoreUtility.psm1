@@ -18,6 +18,7 @@ $DefaultSetting.Regtest.RpcPort = 18443
 
 . $PSScriptRoot\Address.ps1
 . $PSScriptRoot\Balance.ps1
+. $PSScriptRoot\Binary.ps1
 . $PSScriptRoot\Block.ps1
 . $PSScriptRoot\DataDirectory.ps1
 . $PSScriptRoot\MemoryPool.ps1
