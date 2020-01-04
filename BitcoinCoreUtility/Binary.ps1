@@ -31,6 +31,28 @@ function Get-BitcoinCoreBinaryVersion {
 	}
 }
 
+function Expand-BitcoinCoreBinary {
+	param (
+		[Parameter(Mandatory)]
+		[string]
+		$Path,
+
+		[string]
+		$DestinationPath = '.',
+
+		[string]
+		$Version
+	)
+
+	if (!$Version) {
+		$Version = ((Split-Path $Path -Leaf) -split '-')[1]
+	}
+
+	$expanded = Expand-Archive -Path $Path -DestinationPath $DestinationPath -PassThru
+	$expandedRoot =  ($expanded | ? FullName -Like '*bin').Parent
+	Rename-Item -Path $expandedRoot.FullName -NewName $Version -Verbose
+}
+
 function Save-BitcoinCoreBinary {
 	param (
 		[Parameter(Mandatory, HelpMessage = 'The version of Bitcoin Core (e.g. 0.17.1)')]
@@ -41,7 +63,7 @@ function Save-BitcoinCoreBinary {
 		[string]
 		$Os = 'win64'
 	)
-	
+
 	$fileName = "bitcoin-$Version-{0}" -f $(
 		switch ($Os) {
 			aarch64-linux-gnu { 'aarch64-linux-gnu.tar.gz' }
@@ -53,14 +75,14 @@ function Save-BitcoinCoreBinary {
 			x86_64-linux-gnu { 'x86_64-linux-gnu.tar.gz' }
 		}
 	)
-	
+
 	$param = @{
 		Uri     = "https://bitcoincore.org/bin/bitcoin-core-$Version/$fileName"
 		OutFile = $fileName
 		Verbose = $true
 	}
 	Invoke-WebRequest @param
-	
+
 	Get-FileHash $param.OutFile -Algorithm SHA256 | Format-List *
 }
 
