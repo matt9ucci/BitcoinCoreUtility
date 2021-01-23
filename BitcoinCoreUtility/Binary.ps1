@@ -55,7 +55,7 @@ function Expand-BitcoinCoreBinary {
 
 function Save-BitcoinCoreBinary {
 	param (
-		[Parameter(Mandatory, HelpMessage = 'The version of Bitcoin Core (e.g. 0.17.1)')]
+		[Parameter(HelpMessage = 'The version of Bitcoin Core (e.g. 0.17.1)')]
 		[version]
 		$Version,
 
@@ -63,6 +63,15 @@ function Save-BitcoinCoreBinary {
 		[string]
 		$Os = 'win64'
 	)
+
+	if (!$Version) {
+		$tagName = (Invoke-RestMethod 'https://api.github.com/repos/bitcoin/bitcoin/releases/latest').tag_name
+		if ($tagName -match '(\d{1,2}\.\d{1,2}\.\d{1,2})') {
+			$Version = $Matches[0]
+		} else {
+			throw "Unknown tag_name=$tagName"
+		}
+	}
 
 	$fileName = "bitcoin-$Version-{0}" -f $(
 		switch ($Os) {
